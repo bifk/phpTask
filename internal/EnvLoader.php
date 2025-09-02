@@ -4,13 +4,17 @@ class EnvLoader {
     private $path;
     private $env = [];
 
-    public function __construct($path = ".env") {
+    public function __construct($path = __DIR__ . '/../.env') {
         $this->path = $path;
         $this->setEnv();
     }
 
     private function setEnv() {
         if (!file_exists($this->path)) {
+            $files = scandir('.');
+            foreach ($files as $file) {
+                echo $file . "\n";
+            }
             throw new Exception("Env файл не найден по следующему пути: $this->path");
         }
 

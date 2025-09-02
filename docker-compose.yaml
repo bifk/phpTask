@@ -1,0 +1,35 @@
+version: "latest"
+
+services:
+  phpapp:
+    container_name: phpApp
+    build: ./
+    ports:
+      - "8001:8000"
+    volumes:
+      - .:/usr/local/src/
+    restart: always
+    env_file: .env
+    networks:
+      - phpNetwork
+    depends_on:
+      - pgsql
+
+  pgsql:
+    container_name: pgsql
+    image: postgres
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - phpNetwork
+
+networks:
+  phpNetwork:
+    driver: bridge

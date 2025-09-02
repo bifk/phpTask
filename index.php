@@ -1,8 +1,23 @@
 <?php
-    session_start();
-    require_once "Database.php";
-    require_once "migrations/migrator.php";
-    $db = new Database();
-    $con = $db->getConnection();
-    migrationsApply();
-?>
+
+$route = $_SERVER['REQUEST_URI'];
+
+switch ($route) {
+    case '/':
+    case '':
+        require 'templates/index.php';
+        break;
+    case '/registration':
+        require 'templates/registration.php';
+        break;
+    case '/auth':
+        require 'templates/auth.php';
+        break;
+    default:
+        if (file_exists('templates' . $route . '.php')) {
+            require 'templates' . $route . '.php';
+        } else {
+            http_response_code(404);
+        }
+        break;
+}
