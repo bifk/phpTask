@@ -11,7 +11,7 @@ switch ($route) {
         require 'templates/registration.php';
         break;
     case '/auth':
-        require 'templates/auth.php';
+        require 'templates/auth/index.php';
         break;
     case '/logout':
         require 'templates/logout.php';

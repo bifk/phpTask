@@ -1,25 +1,38 @@
 <?php
 session_start();
+
+if (isset($_SESSION['userId'])) {
+    header('Location: /');
+}
+
 require_once __DIR__ . "/../internal/database/user/create.php";
 
 $passwordError = false;
+$registrationError = false;
 
 if (($_SERVER["REQUEST_METHOD"] == "POST") and (isset($_POST["register"]))) {
     if ($_POST["password"] != $_POST["password_confirm"]) {
         $passwordError = true;
     } else {
+        $requiredParams = ['username', 'phone', 'email', 'password'];
+
         $userData = [
             'username' => $_POST["username"],
             'phone' => $_POST["phone"],
             'email' => $_POST["email"],
             'password' => password_hash($_POST["password"], PASSWORD_DEFAULT)
         ];
-        $userId = createUser($userData)->id;
-        if ($userId) {
-            $_SESSION["userId"] = $userId;
-            $_SESSION["username"] = $userData["username"];
-            $_SESSION["phone"] = $userData["phone"];
-            $_SESSION["email"] = $userData["email"];
+
+        try {
+            $user = createUser($userData);
+        } catch (Exception $e) {
+            $registrationError = $e->getMessage();
+        }
+        if (isset($userId) && $userId) {
+            $_SESSION["userId"] = $user->id;
+            $_SESSION["username"] = $user->username;
+            $_SESSION["phone"] = $user->phone;
+            $_SESSION["email"] = $user->email;
 
             $ttl = 60 * 60 * 24;
             setcookie("SessionId", session_id(), time() + $ttl,  "/");
@@ -40,6 +53,8 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") and (isset($_POST["register"]))) {
     <title>Регистрация</title>
 </head>
 <body>
+<h1>Регистрация</h1>
+<a href="/">Главная страница</a>
 <form action="/registration" method="post">
     <input type="text" name="username" placeholder="Имя пользователя" required/>
     <input type="text" name="phone" placeholder="Телефон" required/>
@@ -49,6 +64,9 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") and (isset($_POST["register"]))) {
 
     <?php if ($passwordError): ?>
         <label style="color: #ff0000; display: block;">Пароли не совпадают</label>
+    <?php endif; ?>
+    <?php if ($registrationError): ?>
+        <label style="color: #ff0000; display: block;"><?php echo htmlspecialchars($registrationError) ?></label>
     <?php endif; ?>
 
     <input type="submit" name="register" value="Зарегистрироваться">

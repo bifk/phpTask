@@ -10,6 +10,34 @@ function createUser($userData) {
     $database = new Database();
     $db = $database->getConnection();
 
+
+    if (isset($userData['username'])) {
+        $checkStmt = $db->prepare("SELECT id FROM users WHERE username = :username");
+        $checkStmt->bindParam(":username", $userData['username']);
+        $checkStmt->execute();
+        if ($checkStmt->fetch()) {
+            throw new Exception("Данное имя пользователя уже зарегистрированно");
+        }
+    }
+
+    if (isset($userData['phone'])) {
+        $checkStmt = $db->prepare("SELECT id FROM users WHERE phone = :phone");
+        $checkStmt->bindParam(":phone", $userData['phone']);
+        $checkStmt->execute();
+        if ($checkStmt->fetch()) {
+            throw new Exception("Данный телефон уже зарегистрирован");
+        }
+    }
+
+    if (isset($userData['email'])) {
+        $checkStmt = $db->prepare("SELECT id FROM users WHERE username = :email");
+        $checkStmt->bindParam(":email", $userData['email']);
+        $checkStmt->execute();
+        if ($checkStmt->fetch()) {
+            throw new Exception("Данная эл. почта уже зарегистрированна");
+        }
+    }
+
     $sql = "
       INSERT INTO users (username, phone, email, password) 
       VALUES (:username, :phone, :email, :password)

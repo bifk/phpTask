@@ -43,22 +43,4 @@ function findByEmail($email, $password) {
     return new User($user["id"], $user["username"], $user["phone"], $user["email"]);
 }
 
-function findById($id) {
-    global $db;
-
-    $sql = "SELECT id, username, phone, email FROM users WHERE id = :id";
-    $stmt = $db->prepare($sql);
-    $stmt->bindParam(":id", $id);
-    $stmt->execute();
-
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    $stmt->closeCursor();
-
-    if ($user) {
-        return new User($user["id"], $user["username"], $user["phone"], $user["email"]);
-    }
-    return false;
-}
-
 ?>
