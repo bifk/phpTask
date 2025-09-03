@@ -13,6 +13,12 @@ switch ($route) {
     case '/auth':
         require 'templates/auth.php';
         break;
+    case '/logout':
+        require 'templates/logout.php';
+        break;
+    case '/edit':
+        require 'templates/edit.php';
+        break;
     default:
         if (file_exists('templates' . $route . '.php')) {
             require 'templates' . $route . '.php';

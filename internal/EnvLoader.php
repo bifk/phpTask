@@ -6,15 +6,17 @@ class EnvLoader {
 
     public function __construct($path = __DIR__ . '/../.env') {
         $this->path = $path;
-        $this->setEnv();
+        try {
+            $this->setEnv();
+        } catch (Exception $e) {
+            error_log($e->getMessage());
+            throw new PDOException($e->getMessage());
+        }
     }
 
     private function setEnv() {
         if (!file_exists($this->path)) {
-            $files = scandir('.');
-            foreach ($files as $file) {
-                echo $file . "\n";
-            }
+            error_log("Env файл не найден по пути: $this->path");
             throw new Exception("Env файл не найден по следующему пути: $this->path");
         }
 

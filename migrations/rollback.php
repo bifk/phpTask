@@ -11,8 +11,8 @@ rsort($migrationFiles);
 $rollbackCount = isset($argv[1]) ? $argv[1] : 1;
 $rolledBack = 0;
 
-$i = 0;
-while ($rolledBack < $rollbackCount && $i < count($migrationFiles)) {
+
+for ($i = 0; $rolledBack < $rollbackCount && $i < count($migrationFiles); $i++) {
 
     $migrationName = basename($migrationFiles[$i], '.php');
     require_once $migrationFiles[$i];
@@ -29,7 +29,6 @@ while ($rolledBack < $rollbackCount && $i < count($migrationFiles)) {
             error_log("Ошибка отката миграции: " . $e->getMessage() . "\n");
         }
     }
-    $i++;
     $rolledBack++;
 }
 

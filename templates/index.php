@@ -11,7 +11,6 @@ $username = "";
 
 if (isset($_SESSION["username"])) {
     $username = $_SESSION['username'];
-
 }
 
 ?>
@@ -32,7 +31,7 @@ if (isset($_SESSION["username"])) {
             <a href="/registration">Регистрация</a>
             <a href="/auth">Авторизация</a>
         <?php else: ?>
-            <a href="#"><?php echo htmlspecialchars($username) ?></a>
+            <a href="/edit"><?php echo htmlspecialchars($username) ?></a>
             <a href="/logout">Выйти</a>
         <?php endif; ?>
     </nav>

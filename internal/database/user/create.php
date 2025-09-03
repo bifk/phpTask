@@ -28,6 +28,7 @@ function createUser($userData) {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
         return new User($user["id"], $user["username"], $user["phone"], $user["email"]);
     }
+    $stmt->closeCursor();
 
     return false;
 }

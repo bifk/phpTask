@@ -40,7 +40,7 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") and (isset($_POST["register"]))) {
     <title>Регистрация</title>
 </head>
 <body>
-<form action="/templates/registration.php" method="post">
+<form action="/registration" method="post">
     <input type="text" name="username" placeholder="Имя пользователя" required/>
     <input type="text" name="phone" placeholder="Телефон" required/>
     <input type="email" name="email" placeholder="Эл. почта" required/>
@@ -49,8 +49,6 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") and (isset($_POST["register"]))) {
 
     <?php if ($passwordError): ?>
         <label style="color: #ff0000; display: block;">Пароли не совпадают</label>
-    <?php else: ?>
-        <label style="color: #ff0000; display: none;">Пароли не совпадают</label>
     <?php endif; ?>
 
     <input type="submit" name="register" value="Зарегистрироваться">
