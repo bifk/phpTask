@@ -9,6 +9,8 @@ if (!isset($_SESSION['userId'])) {
 
 $editError = false;
 if (($_SERVER["REQUEST_METHOD"] == "POST") && (isset($_POST["edit"]))) {
+
+    // Проверка на неизмененные или пустые данные
     $userData = [
         'username' => $_POST["username"] === $_SESSION["username"] || $_POST["username"] === "" ? "" : $_POST["username"],
         'phone' =>$_POST["phone"] === $_SESSION["phone"] || $_POST["phone"] === "" ? "" : $_POST["phone"],
@@ -25,6 +27,7 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && (isset($_POST["edit"]))) {
         $_SESSION["phone"] = $user->phone;
         $_SESSION["email"] = $user->email;
 
+        // Срок действия сессии - 24 часа
         $ttl = 60 * 60 * 24;
         setcookie("SessionId", session_id(), time() + $ttl,  "/");
         header("Location: /");

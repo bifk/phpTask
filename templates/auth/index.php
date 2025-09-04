@@ -15,6 +15,7 @@ $wrongCaptcha = false;
 
 $envLoader = new EnvLoader();
 
+// Ключи для каптчи хранятся в .env файле в корне проекта
 $captcha_client_key = $envLoader->getEnv("CAPTCHA_CLIENT_KEY");
 
 if (($_SERVER["REQUEST_METHOD"] == "POST") && (isset($_POST["auth"]))) {
@@ -29,8 +30,8 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && (isset($_POST["auth"]))) {
         ];
 
         $user = false;
-        $userPhone = findByPhone($userData['login'], $userData['password']);
-        $userEmail = findByEmail($userData['login'], $userData['password']);
+        $userPhone = find("phone", $userData['login'], $userData['password']);
+        $userEmail = find("email", $userData['login'], $userData['password']);
 
         if ($userPhone) {
             $user = $userPhone;
@@ -45,6 +46,7 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") && (isset($_POST["auth"]))) {
             $_SESSION["phone"] = $user->phone;
             $_SESSION["email"] = $user->email;
 
+            // Срок действия сессии - 24 часа
             $ttl = 60 * 60 * 24;
             setcookie("SessionId", session_id(), time() + $ttl,  "/");
             header("Location: /");

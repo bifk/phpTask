@@ -10,7 +10,7 @@ require_once __DIR__ . "/../internal/database/user/create.php";
 $passwordError = false;
 $registrationError = false;
 
-if (($_SERVER["REQUEST_METHOD"] == "POST") and (isset($_POST["register"]))) {
+if (($_SERVER["REQUEST_METHOD"] == "POST") && (isset($_POST["register"]))) {
     if ($_POST["password"] != $_POST["password_confirm"]) {
         $passwordError = true;
     } else {
@@ -28,12 +28,13 @@ if (($_SERVER["REQUEST_METHOD"] == "POST") and (isset($_POST["register"]))) {
         } catch (Exception $e) {
             $registrationError = $e->getMessage();
         }
-        if (isset($userId) && $userId) {
+        if (isset($user) && $user) {
             $_SESSION["userId"] = $user->id;
             $_SESSION["username"] = $user->username;
             $_SESSION["phone"] = $user->phone;
             $_SESSION["email"] = $user->email;
 
+            // Срок действия сессии - 24 часа
             $ttl = 60 * 60 * 24;
             setcookie("SessionId", session_id(), time() + $ttl,  "/");
             header("Location: /");

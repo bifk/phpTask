@@ -5,12 +5,13 @@ require_once __DIR__ . "/../../../models/User.php";
 require_once __DIR__ . "/../Database.php";
 
 
-
+// Регистрация пользователя
 function createUser($userData) {
     $database = new Database();
     $db = $database->getConnection();
 
 
+    // Проверка на уникальность параметров
     if (isset($userData['username'])) {
         $checkStmt = $db->prepare("SELECT id FROM users WHERE username = :username");
         $checkStmt->bindParam(":username", $userData['username']);

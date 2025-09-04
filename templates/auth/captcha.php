@@ -13,6 +13,7 @@ function check_captcha($token) {
         $ip = $_SERVER['REMOTE_ADDR'];
     }
 
+    // Ключи для каптчи хранятся в .env файле в корне проекта
     global $envLoader;
     define("SMARTCAPTCHA_SERVER_KEY", $envLoader->getEnv("CAPTCHA_SERVER_KEY"));
     $args = [

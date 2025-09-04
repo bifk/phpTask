@@ -11,6 +11,7 @@ class Database
     private $username;
     private $password;
 
+    // Данные для подключения к базе данных хранятся в .env файле в корне проекта
     public function __construct()
     {
         $envLoader = new EnvLoader();

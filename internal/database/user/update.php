@@ -4,10 +4,12 @@
 require_once __DIR__ . "/../../../models/User.php";
 require_once __DIR__ . "/../Database.php";
 
+// Изменение данных пользователя
 function updateUser($userId, $userData) {
     $database = new Database();
     $db = $database->getConnection();
 
+    // Удаление из масива пустых ключей
     foreach ($userData as $key => $value) {
         if ($value === "") {
             unset($userData[$key]);
@@ -18,6 +20,7 @@ function updateUser($userId, $userData) {
 
     $newData = [];
 
+    // Проверка на разрешенные поля для изменения
     foreach ($userData as $key => $value) {
         if (in_array($key, $allow)) {
             $newData[$key] = $value;
@@ -28,6 +31,8 @@ function updateUser($userId, $userData) {
         return false;
     }
 
+
+    // Проверка на уникальность изменяемых параметров
     if (isset($newData['username'])) {
         $checkStmt = $db->prepare("SELECT id FROM users WHERE username = :username AND id != :id");
         $checkStmt->bindParam(":username", $newData['username']);
