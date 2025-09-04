@@ -13,7 +13,8 @@ services:
     networks:
       - phpNetwork
     depends_on:
-      - pgsql
+      pgsql:
+        condition: service_healthy
 
   pgsql:
     container_name: pgsql
@@ -29,6 +30,11 @@ services:
     restart: always
     networks:
       - phpNetwork
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 networks:
   phpNetwork:
